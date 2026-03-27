@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-    pickone-client:
-        container_name: pickone-client
+    zyslet-client:
+        container_name: zyslet-client
         build:
-            context: ./pickone-client
+            context: ./zyslet-client
             dockerfile: Dockerfile
             args:
                 NEXT_PUBLIC_BASE_URL: https://server.azmarif.dev
@@ -16,37 +16,37 @@ services:
         env_file:
             - .env
         volumes:
-            - ./pickone-client:/client
+            - ./zyslet-client:/client
             - /client/node_modules
             - /client/.next
         networks:
-            - pickone-network
+            - zyslet-network
         depends_on:
-            - pickone-backend
+            - zyslet-backend
         restart: unless-stopped
 
-    pickone-backend:
-        container_name: pickone-backend
+    zyslet-backend:
+        container_name: zyslet-backend
         build:
-            context: ./pickone-server
+            context: ./zyslet-server
             dockerfile: Dockerfile
         ports:
             - '5000:5000'
         volumes:
-            - ./pickone-server:/app
+            - ./zyslet-server:/app
             - /app/node_modules
             - /app/dist
             - server-tmp:/tmp
         env_file:
             - .env
         networks:
-            - pickone-network
+            - zyslet-network
         restart: unless-stopped
 
-    pickone-admin:
-        container_name: pickone-admin
+    zyslet-admin:
+        container_name: zyslet-admin
         build:
-            context: ./pickone-admin
+            context: ./zyslet-admin
             dockerfile: Dockerfile
             args:
                 NEXT_PUBLIC_BASE_URL: https://server.azmarif.dev
@@ -55,24 +55,24 @@ services:
         env_file:
             - .env
         volumes:
-            - ./pickone-admin:/src
+            - ./zyslet-admin:/src
             - /src/node_modules
             - /src/.next
         networks:
-            - pickone-network
+            - zyslet-network
         depends_on:
-            - pickone-backend
+            - zyslet-backend
         restart: unless-stopped
 
     mongodb:
         image: mongo:latest
-        container_name: pickone-mongodb
+        container_name: zyslet-mongodb
         ports:
             - '27017:27017'
         volumes:
             - mongo-data:/data/db
         networks:
-            - pickone-network
+            - zyslet-network
         environment:
             - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
             - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
@@ -81,7 +81,7 @@ services:
 
     nginx:
         image: nginx:latest
-        container_name: pickone-nginx
+        container_name: zyslet-nginx
         ports:
             - '80:80'
             - '443:443'
@@ -92,16 +92,16 @@ services:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
         depends_on:
-            - pickone-backend
-            - pickone-client
-            - pickone-admin
+            - zyslet-backend
+            - zyslet-client
+            - zyslet-admin
         networks:
-            - pickone-network
+            - zyslet-network
         restart: unless-stopped
 
     certbot:
         image: certbot/certbot:latest
-        container_name: pickone-certbot
+        container_name: zyslet-certbot
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
@@ -109,7 +109,7 @@ services:
         depends_on:
             - nginx
         networks:
-            - pickone-network
+            - zyslet-network
 
 volumes:
     mongo-data:
@@ -118,5 +118,5 @@ volumes:
         driver: local
 
 networks:
-    pickone-network:
+    zyslet-network:
         driver: bridge

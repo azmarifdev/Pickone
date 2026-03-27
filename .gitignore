@@ -87,10 +87,10 @@ temp/
 # Docker
 .dockerignore
 
-pickone-client/node_modules
-pickone-admin/node_modules
-pickone-server/node_modules
+zyslet-client/node_modules
+zyslet-admin/node_modules
+zyslet-server/node_modules
 
-pickone-client/.next
-pickone-admin/.next
-pickone-server/dist
+zyslet-client/.next
+zyslet-admin/.next
+zyslet-server/dist

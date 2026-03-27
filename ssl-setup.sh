@@ -233,15 +233,15 @@ http {
 
     # Upstream definitions
     upstream admin_backend {
-        server pickone-admin:3000 max_fails=3 fail_timeout=30s;
+        server zyslet-admin:3000 max_fails=3 fail_timeout=30s;
     }
 
     upstream client_backend {
-        server pickone-client:4000 max_fails=3 fail_timeout=30s;
+        server zyslet-client:4000 max_fails=3 fail_timeout=30s;
     }
 
     upstream api_backend {
-        server pickone-backend:5000 max_fails=3 fail_timeout=30s;
+        server zyslet-backend:5000 max_fails=3 fail_timeout=30s;
     }
 
     # HTTP redirect to HTTPS

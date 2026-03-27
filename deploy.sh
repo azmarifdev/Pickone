@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# PickOne Production Deployment Script
+# Zyslet Production Deployment Script
 # Author: GitHub Copilot
 # Date: $(date)
 
 set -e
 
-echo "🚀 Starting PickOne Production Deployment..."
+echo "🚀 Starting Zyslet Production Deployment..."
 
 # Colors for output
 RED='\033[0;31m'
@@ -53,7 +53,7 @@ if [ ! -f .env ]; then
 fi
 
 # Setup service environment files
-services=("pickone-admin" "pickone-client" "pickone-server")
+services=("zyslet-admin" "zyslet-client" "zyslet-server")
 for service in "${services[@]}"; do
     if [ ! -f "$service/.env" ]; then
         print_status "Creating $service/.env from .env.example..."
@@ -67,23 +67,23 @@ print_success "Environment file found."
 print_status "Setting up service environment files..."
 
 # Copy main .env to individual services (using folder names, not container names)
-cp .env pickone-server/.env
-cp .env pickone-admin/.env  
-cp .env pickone-client/.env
+cp .env zyslet-server/.env
+cp .env zyslet-admin/.env  
+cp .env zyslet-client/.env
 
 # Also copy .env.example files as backup templates
-if [ ! -f pickone-server/.env ]; then
-    cp pickone-server/.env.example pickone-server/.env
+if [ ! -f zyslet-server/.env ]; then
+    cp zyslet-server/.env.example zyslet-server/.env
     print_warning "Created server .env from template"
 fi
 
-if [ ! -f pickone-admin/.env ]; then
-    cp pickone-admin/.env.example pickone-admin/.env
+if [ ! -f zyslet-admin/.env ]; then
+    cp zyslet-admin/.env.example zyslet-admin/.env
     print_warning "Created admin .env from template"
 fi
 
-if [ ! -f pickone-client/.env ]; then
-    cp pickone-client/.env.example pickone-client/.env
+if [ ! -f zyslet-client/.env ]; then
+    cp zyslet-client/.env.example zyslet-client/.env
     print_warning "Created client .env from template"
 fi
 
@@ -166,7 +166,7 @@ print_status "To view logs: docker-compose logs -f [service-name]"
 print_status "To restart: docker-compose restart [service-name]"
 print_status "To stop all: docker-compose down"
 echo ""
-print_success "✨ Deployment successful! Your PickOne application is now live on HTTP! ✨"
+print_success "✨ Deployment successful! Your Zyslet application is now live on HTTP! ✨"
 echo ""
 print_warning "🔒 For production use, enable HTTPS by running: ./ssl-setup.sh"
 
@@ -193,15 +193,15 @@ print_status "Seeding database with admin user..."
 sleep 10
 
 # Try seeding with different approaches
-if docker-compose exec -T pickone-backend npm run seed 2>/dev/null; then
+if docker-compose exec -T zyslet-backend npm run seed 2>/dev/null; then
     print_success "Database seeded successfully."
     print_success "Admin credentials: admin@gmail.com / admin@"
-elif docker-compose exec pickone-backend npm run seed 2>/dev/null; then
+elif docker-compose exec zyslet-backend npm run seed 2>/dev/null; then
     print_success "Database seeded successfully."
     print_success "Admin credentials: admin@gmail.com / admin@"
 else
     print_warning "Database seeding failed. You can run it manually later with:"
-    print_warning "docker-compose exec pickone-backend npm run seed"
+    print_warning "docker-compose exec zyslet-backend npm run seed"
 fi
 
 # Skip SSL auto-renewal setup for now
@@ -232,6 +232,6 @@ print_status "To view logs: docker-compose logs -f [service-name]"
 print_status "To restart: docker-compose restart [service-name]"
 print_status "To stop all: docker-compose down"
 echo ""
-print_success "✨ Deployment successful! Your PickOne application is now live on HTTP! ✨"
+print_success "✨ Deployment successful! Your Zyslet application is now live on HTTP! ✨"
 echo ""
 print_warning "🔒 For production use, enable HTTPS by running: ./ssl-setup.sh"

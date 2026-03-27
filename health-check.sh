@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Health Check Script for PickOne Application
+# Health Check Script for Zyslet Application
 # Checks the status of all services and endpoints
 
-echo "🏥 PickOne Health Check Started..."
+echo "🏥 Zyslet Health Check Started..."
 
 # Colors
 GREEN='\033[0;32m'

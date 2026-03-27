@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# PickOne Production Backup Script
+# Zyslet Production Backup Script
 # Creates backups of database and uploaded files
 
 set -e
@@ -29,22 +29,22 @@ print_error() {
 }
 
 # Configuration
-BACKUP_DIR="/root/pickone-backups"
+BACKUP_DIR="/root/zyslet-backups"
 DATE=$(date +"%Y%m%d_%H%M%S")
-DB_BACKUP_NAME="pickone_db_backup_${DATE}"
-FILES_BACKUP_NAME="pickone_files_backup_${DATE}"
+DB_BACKUP_NAME="zyslet_db_backup_${DATE}"
+FILES_BACKUP_NAME="zyslet_files_backup_${DATE}"
 
-echo "🔄 Starting PickOne Production Backup..."
+echo "🔄 Starting Zyslet Production Backup..."
 
 # Create backup directory
 mkdir -p "$BACKUP_DIR"
 
 # Database backup
 print_status "Creating database backup..."
-if docker-compose exec -T mongodb mongodump --host localhost --port 27017 --db pickone-db --username pickone-db --password OQAEKyl6PEhxFF59 --authenticationDatabase admin --out /tmp/backup 2>/dev/null; then
+if docker-compose exec -T mongodb mongodump --host localhost --port 27017 --db zyslet-db --username zyslet-db --password OQAEKyl6PEhxFF59 --authenticationDatabase admin --out /tmp/backup 2>/dev/null; then
     
     # Copy backup from container to host
-    docker cp pickone-mongodb:/tmp/backup "$BACKUP_DIR/$DB_BACKUP_NAME"
+    docker cp zyslet-mongodb:/tmp/backup "$BACKUP_DIR/$DB_BACKUP_NAME"
     
     # Create compressed archive
     cd "$BACKUP_DIR"
@@ -59,7 +59,7 @@ fi
 # Files backup
 print_status "Creating files backup..."
 if [ -d "server-tmp" ]; then
-    cd /data/Code/code-encover/pickone-deploy
+    cd /data/Code/code-encover/zyslet-deploy
     tar -czf "$BACKUP_DIR/${FILES_BACKUP_NAME}.tar.gz" server-tmp/
     print_success "Files backup created: ${FILES_BACKUP_NAME}.tar.gz"
 else
@@ -95,7 +95,7 @@ ls -la "$BACKUP_DIR" | grep "${DATE}"
 echo ""
 print_status "To restore database backup:"
 echo "  1. Extract: tar -xzf ${DB_BACKUP_NAME}.tar.gz"
-echo "  2. Restore: docker-compose exec mongodb mongorestore --host localhost --port 27017 --username pickone-db --password OQAEKyl6PEhxFF59 --authenticationDatabase admin /tmp/restore-path"
+echo "  2. Restore: docker-compose exec mongodb mongorestore --host localhost --port 27017 --username zyslet-db --password OQAEKyl6PEhxFF59 --authenticationDatabase admin /tmp/restore-path"
 
 print_status "To restore files backup:"
 echo "  1. Extract: tar -xzf ${FILES_BACKUP_NAME}.tar.gz"

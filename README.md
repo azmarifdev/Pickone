@@ -1,4 +1,4 @@
-# Zyslet Commerce Platform (PickOne)
+# Zyslet Commerce Platform (Zyslet)
 
 Production-ready full-stack eCommerce platform with separate **Client**, **Admin**, and **Server** applications.
 
@@ -9,13 +9,13 @@ This project was re-architected for real deployment and portfolio presentation, 
 - Client: `https://zyslet.com`
 - Admin: `https://admin.zyslet.com`
 - API Server: `https://server.zyslet.com`
-- Fallback API (during SSL/setup windows): `https://pickone-server.onrender.com`
+- Fallback API (during SSL/setup windows): `https://zyslet-server.onrender.com`
 
 ## Repositories / Apps
 
-- `pickone-client` (Next.js 14): customer-facing storefront
-- `pickone-admin` (Next.js 14): admin dashboard and content/order management
-- `pickone-server` (Express + TypeScript + MongoDB): REST API, auth, product/order/review logic
+- `zyslet-client` (Next.js 14): customer-facing storefront
+- `zyslet-admin` (Next.js 14): admin dashboard and content/order management
+- `zyslet-server` (Express + TypeScript + MongoDB): REST API, auth, product/order/review logic
 
 ## Key Features Implemented
 
@@ -97,7 +97,7 @@ This project was re-architected for real deployment and portfolio presentation, 
 
 ### 1) Server
 ```bash
-cd pickone-server
+cd zyslet-server
 npm install
 npm run dev
 ```
@@ -105,7 +105,7 @@ Runs by default on `http://localhost:5000` (depending on `.env`).
 
 ### 2) Admin
 ```bash
-cd pickone-admin
+cd zyslet-admin
 npm install
 npm run dev
 ```
@@ -113,7 +113,7 @@ Runs on `http://localhost:3000`.
 
 ### 3) Client
 ```bash
-cd pickone-client
+cd zyslet-client
 npm install
 npm run dev
 ```
@@ -122,7 +122,7 @@ Runs on `http://localhost:3000` (use different port if both Next apps run togeth
 ## Environment Configuration
 
 - Root sample: [`.env.example`](./.env.example)
-- Server sample: [`pickone-server/.env.example`](./pickone-server/.env.example)
+- Server sample: [`zyslet-server/.env.example`](./zyslet-server/.env.example)
 
 Important production values include:
 - MongoDB Atlas connection string (`DATABASE_URL`)
