@@ -5,8 +5,8 @@ import StaticPageClient from '@/components/client/StaticPageClient';
 import ShippingReturnsContent from '../../components/pages-components/ShippingReturnsContent';
 
 export const metadata: Metadata = {
-    title: 'Shipping & Returns Policy - Ekhoni Kinbo',
-    description: 'Learn about our shipping methods, delivery times, and return policy for Ekhoni Kinbo products.',
+    title: 'Shipping & Returns Policy - ZysLet',
+    description: 'Learn about our shipping methods, delivery times, and return policy for ZysLet products.',
 };
 
 export default function ShippingReturnsPage() {

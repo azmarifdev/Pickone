@@ -33,8 +33,8 @@ export const cookieConfig = {
 
 // Cookie names
 export const cookieNames = {
-   ACCESS_TOKEN: 'pickone_access_token',
-   REFRESH_TOKEN: 'pickone_refresh_token',
+   ACCESS_TOKEN: 'zyslet_access_token',
+   REFRESH_TOKEN: 'zyslet_refresh_token',
 };
 
 // Helper function to get clear cookie options (same as set options but without maxAge)

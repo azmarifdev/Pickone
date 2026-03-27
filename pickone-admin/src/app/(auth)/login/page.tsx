@@ -4,12 +4,12 @@ import { useLoginUserMutation } from '@/redux/api/authApi';
 import { setUser } from '@/redux/features/authSlice';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { FiEye, FiEyeOff, FiMail, FiLock, FiLogIn, FiShield } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiMail, FiLock, FiLogIn } from 'react-icons/fi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import BrandLogo from '@/components/reusable/BrandLogo';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
@@ -63,8 +63,8 @@ export default function LoginForm() {
                 <CardContent className="p-8">
                     {/* Logo & Header */}
                     <div className="text-center mb-8">
-                        <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                            <FiShield className="w-8 h-8 text-white" />
+                        <div className="mb-4 flex justify-center">
+                            <BrandLogo href="/login" subtitle="Admin Panel" />
                         </div>
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
                             Welcome Back

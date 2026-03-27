@@ -1,7 +1,7 @@
 {
-   "name": "pickone-server",
+   "name": "zyslet-server",
    "version": "1.0.0",
-   "description": "pickone-server",
+   "description": "zyslet-server",
    "main": "src/server.ts",
    "scripts": {
       "start": "node dist/server.js",

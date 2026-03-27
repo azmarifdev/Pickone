@@ -11,6 +11,7 @@ type SideCartProps = {
 };
 export default function SideCart({ open, onOpenChange }: SideCartProps) {
     const { cartItems, updateQuantity, removeItem, itemCount, cartTotal } = useCart();
+    const closeSidebar = () => onOpenChange(false);
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -78,7 +79,7 @@ export default function SideCart({ open, onOpenChange }: SideCartProps) {
                                 marginBottom: '5px',
                                 boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
                             }}>
-                            <CartActions />
+                            <CartActions onCheckoutComplete={closeSidebar} />
                         </div>
                     </div>
                 )}

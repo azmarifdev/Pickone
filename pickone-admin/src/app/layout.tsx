@@ -7,8 +7,8 @@ import { Toaster } from 'react-hot-toast';
 const lexend = Lexend_Deca({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Ekhoni Kinbo - Dashboard',
-    description: 'Welcome to the Ekhoni Kinbo Dashboard',
+    title: 'ZysLet - Dashboard',
+    description: 'Welcome to the ZysLet Dashboard',
 };
 
 export default function RootLayout({

@@ -7,9 +7,9 @@ import WarrantyContent from '@/components/pages-components/WarrantyPageComponent
 const StaticPageClient = dynamic(() => import('@/components/client/StaticPageClient'), { ssr: false });
 
 export const metadata: Metadata = {
-    title: 'Warranty Information - Ekhoni Kinbo',
+    title: 'Warranty Information - ZysLet',
     description:
-        'Learn about our product warranties, coverage policies, and how to make warranty claims for your Ekhoni Kinbo solar lighting products.',
+        'Learn about our product warranties, coverage policies, and how to make warranty claims for your ZysLet solar lighting products.',
 };
 
 export default function WarrantyPage() {

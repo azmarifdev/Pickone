@@ -10,6 +10,19 @@ export const orderApi = api.injectEndpoints({
             providesTags: ["orders"],
         }),
 
+        // Update order status
+        updateOrderStatus: builder.mutation<
+            any,
+            {id: string; status: "pending" | "processing" | "completed" | "cancelled"}
+        >({
+            query: ({id, status}) => ({
+                url: `/api/v1/order/status/${id}`,
+                method: "PATCH",
+                body: {status},
+            }),
+            invalidatesTags: ["orders"],
+        }),
+
         // Update order status to "processing"
         approveOrder: builder.mutation<any, string>({
             query: (id) => ({
@@ -50,6 +63,7 @@ export const orderApi = api.injectEndpoints({
 
 export const {
     useGetOrdersQuery,
+    useUpdateOrderStatusMutation,
     useApproveOrderMutation,
     useCompleteOrderMutation,
     useCancelOrderMutation,

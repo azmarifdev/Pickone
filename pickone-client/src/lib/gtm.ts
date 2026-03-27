@@ -88,7 +88,7 @@ export function trackProductView(product: any) {
         discount: product.discount || 0,
         currency: 'BDT',
         item_category: product.category?.name || product.categoryName || '',
-        item_brand: 'PickOne',
+        item_brand: 'ZysLet',
         quantity: 1,
     };
 
@@ -134,7 +134,7 @@ export function trackAddToCart(product: any, quantity: number) {
         quantity: quantity || 1,
         discount: product.discount || 0,
         item_category: product.category?.name || product.categoryName || '',
-        item_brand: 'PickOne',
+        item_brand: 'ZysLet',
     };
 
     // GA4 Event: add_to_cart
@@ -209,7 +209,7 @@ export function trackBeginCheckout(products: any[], totalValue: number) {
         currency: 'BDT',
         quantity: product.quantity || 1,
         item_category: product.category?.name || product.categoryName || '',
-        item_brand: 'PickOne',
+        item_brand: 'ZysLet',
     }));
 
     // GA4 Event: begin_checkout
@@ -253,7 +253,7 @@ export function trackPurchase(
         currency: 'BDT',
         quantity: product.quantity || 1,
         item_category: product.category?.name || product.categoryName || '',
-        item_brand: 'PickOne',
+        item_brand: 'ZysLet',
     }));
 
     // GA4 Event: purchase

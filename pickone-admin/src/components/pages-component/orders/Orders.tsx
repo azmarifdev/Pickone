@@ -14,9 +14,7 @@ import {
 import Loader from "@/components/reusable/Loader/Loader";
 import {
     useGetOrdersQuery,
-    useApproveOrderMutation,
-    useCompleteOrderMutation,
-    useCancelOrderMutation,
+    useUpdateOrderStatusMutation,
     useDeleteOrderMutation,
 } from "@/redux/api/orderApi";
 import NotFound from "@/components/shared/NotFound";
@@ -47,9 +45,7 @@ const Order = () => {
     const [totalPages, setTotalPages] = useState(1);
 
     // RTK Query hooks
-    const [approveOrder] = useApproveOrderMutation();
-    const [completeOrder] = useCompleteOrderMutation();
-    const [cancelOrder] = useCancelOrderMutation();
+    const [updateOrderStatus] = useUpdateOrderStatusMutation();
     const [deleteOrder] = useDeleteOrderMutation();
 
     // State for modals
@@ -57,8 +53,9 @@ const Order = () => {
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState<{
-        type: "approve" | "complete" | "cancel" | "delete";
+        type: "status" | "delete";
         orderId: string;
+        nextStatus?: "pending" | "processing" | "completed" | "cancelled";
         title: string;
         description: string;
     } | null>(null);
@@ -141,8 +138,9 @@ const Order = () => {
     }, [itemsPerPage, debouncedSearchTerm, statusFilter, dateFilter]);
 
     const handleAction = (
-        type: "approve" | "complete" | "cancel" | "delete" | "view",
-        order: any
+        type: "status" | "delete" | "view",
+        order: any,
+        nextStatus?: "pending" | "processing" | "completed" | "cancelled"
     ) => {
         if (type === "view") {
             setCurrentOrder(order);
@@ -150,29 +148,31 @@ const Order = () => {
             return;
         }
 
+        if (type === "status") {
+            if (!nextStatus || order?.status === nextStatus) return;
+
+            const statusLabel =
+                nextStatus === "cancelled"
+                    ? "Cancel"
+                    : nextStatus.charAt(0).toUpperCase() + nextStatus.slice(1);
+
+            setConfirmAction({
+                type,
+                orderId: order._id,
+                nextStatus,
+                title: `Update Status to ${statusLabel}`,
+                description: `Are you sure you want to change this order status to ${statusLabel}?`,
+            });
+            setIsConfirmModalOpen(true);
+            return;
+        }
+
         let title = "";
         let description = "";
 
-        switch (type) {
-            case "approve":
-                title = "Approve Order";
-                description = "Are you sure you want to approve this order?";
-                break;
-            case "complete":
-                title = "Complete Order";
-                description =
-                    "Are you sure you want to mark this order as completed?";
-                break;
-            case "cancel":
-                title = "Cancel Order";
-                description = "Are you sure you want to cancel this order?";
-                break;
-            case "delete":
-                title = "Delete Order";
-                description =
-                    "Are you sure you want to delete this order? This action cannot be undone.";
-                break;
-        }
+        title = "Delete Order";
+        description =
+            "Are you sure you want to delete this order? This action cannot be undone.";
 
         setConfirmAction({type, orderId: order._id, title, description});
         setIsConfirmModalOpen(true);
@@ -183,14 +183,13 @@ const Order = () => {
 
         try {
             switch (confirmAction.type) {
-                case "approve":
-                    await approveOrder(confirmAction.orderId).unwrap();
-                    break;
-                case "complete":
-                    await completeOrder(confirmAction.orderId).unwrap();
-                    break;
-                case "cancel":
-                    await cancelOrder(confirmAction.orderId).unwrap();
+                case "status":
+                    if (confirmAction.nextStatus) {
+                        await updateOrderStatus({
+                            id: confirmAction.orderId,
+                            status: confirmAction.nextStatus,
+                        }).unwrap();
+                    }
                     break;
                 case "delete":
                     await deleteOrder(confirmAction.orderId).unwrap();

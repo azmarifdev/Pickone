@@ -133,8 +133,8 @@ const ContactPageComponent = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-semibold text-gray-800">Email</h3>
-                                        <p className="text-gray-600">Customer Support: support@ekhonikinbo.com</p>
-                                        <p className="text-gray-600">Order Inquiries: orders@ekhonikinbo.com</p>
+                                        <p className="text-gray-600">Customer Support: support@zyslet.com</p>
+                                        <p className="text-gray-600">Order Inquiries: orders@zyslet.com</p>
                                     </div>
                                 </div>
 
@@ -169,7 +169,7 @@ const ContactPageComponent = () => {
                             <h3 className="text-xl font-semibold text-gray-800 mb-4">Connect With Us</h3>
                             <div className="flex space-x-4">
                                 <a
-                                    href="https://www.facebook.com/EkhoniKinbo"
+                                    href="https://www.facebook.com/ZysLet"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-gray-100 hover:bg-blue-100 p-3 rounded-full transition-colors">
@@ -182,7 +182,7 @@ const ContactPageComponent = () => {
                                     </svg>
                                 </a>
                                 <a
-                                    href="https://www.instagram.com/ekhonikinbo"
+                                    href="https://www.instagram.com/zyslet"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-gray-100 hover:bg-pink-100 p-3 rounded-full transition-colors">
@@ -196,7 +196,7 @@ const ContactPageComponent = () => {
                                     </svg>
                                 </a>
                                 <a
-                                    href="https://www.twitter.com/ekhonikinbo"
+                                    href="https://www.twitter.com/zyslet"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-gray-100 hover:bg-blue-100 p-3 rounded-full transition-colors">
@@ -432,7 +432,7 @@ const ContactPageComponent = () => {
                                 Still have questions? Our customer service team is ready to help.
                             </p>
                             <a
-                                href="mailto:support@ekhonikinbo.com"
+                                href="mailto:support@zyslet.com"
                                 className="inline-flex items-center font-medium text-blue-600 hover:text-blue-800">
                                 Contact our support team
                                 <svg

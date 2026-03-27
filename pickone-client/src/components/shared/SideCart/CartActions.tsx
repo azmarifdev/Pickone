@@ -5,7 +5,11 @@ import CheckoutModal from './CheckoutModal';
 import { useCart } from '@/components/context/CartContext';
 import { trackBeginCheckout } from '@/lib/gtm';
 
-const CartActions: React.FC = () => {
+interface CartActionsProps {
+    onCheckoutComplete?: () => void;
+}
+
+const CartActions: React.FC<CartActionsProps> = ({ onCheckoutComplete }) => {
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
     const { cartItems, cartTotal } = useCart();
 
@@ -37,7 +41,11 @@ const CartActions: React.FC = () => {
                 </div>
             </div>
 
-            <CheckoutModal isOpen={isCheckoutModalOpen} onClose={() => setIsCheckoutModalOpen(false)} />
+            <CheckoutModal
+                isOpen={isCheckoutModalOpen}
+                onClose={() => setIsCheckoutModalOpen(false)}
+                onCheckoutComplete={onCheckoutComplete}
+            />
         </>
     );
 };

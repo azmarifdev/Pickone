@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import path from 'path';
 import { corsOptionsDelegate } from './app/middleware/cors';
 import { globalErrorHandler } from './app/middleware/globalErrorHandler';
 import { trackPageView } from './app/middleware/fbConversionTracker';
@@ -30,6 +31,17 @@ app.use(
 
 // Track page views with Facebook Conversion API
 app.use(trackPageView);
+
+// Serve uploaded files from /tmp via /server-tmp
+app.use(
+   '/server-tmp',
+   express.static(path.join('/tmp'), {
+      setHeaders: res => {
+         res.setHeader('Access-Control-Allow-Origin', '*');
+         res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+      },
+   })
+);
 
 // application routes
 app.get('/', (req: Request, res: Response) => {

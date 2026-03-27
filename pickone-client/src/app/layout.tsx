@@ -21,8 +21,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-    title: 'Ekhoni Kinbo - Premium Shopping Experience',
-    description: 'Discover quality products with an enhanced shopping experience at Ekhoni Kinbo',
+    title: 'ZysLet - Premium Shopping Experience',
+    description: 'Discover quality products with an enhanced shopping experience at ZysLet',
 };
 
 interface RootLayoutProps {

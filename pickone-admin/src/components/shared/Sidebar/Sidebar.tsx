@@ -11,6 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { SiProducthunt } from 'react-icons/si';
 import { useLogoutMutation } from '@/redux/api/authApi';
 import { logout } from '@/redux/features/authSlice';
+import BrandLogo from '@/components/reusable/BrandLogo';
 
 const Sidebar = () => {
     const pathname = usePathname();
@@ -107,16 +108,9 @@ const Sidebar = () => {
                             isCollapsed && !isMobile ? 'px-2' : ''
                         }`}>
                         {isCollapsed && !isMobile ? (
-                            <div className="text-center">
-                                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-lg">EK</span>
-                                </div>
-                            </div>
+                            <BrandLogo compact href="/dashboard" variant="light" />
                         ) : (
-                            <div className="text-center">
-                                <h1 className="text-2xl text-white font-bold tracking-wide">Ekhoni Kinbo</h1>
-                                <p className="text-slate-400 text-sm mt-1">Admin Panel</p>
-                            </div>
+                            <BrandLogo href="/dashboard" subtitle="Admin Panel" variant="light" />
                         )}
                     </div>
 

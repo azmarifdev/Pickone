@@ -1,9 +1,9 @@
 // import { Metadata } from 'next';
 
 // export const metadata: Metadata = {
-//     title: 'Warranty Information - Ekhoni Kinbo',
+//     title: 'Warranty Information - ZysLet',
 //     description:
-//         'Learn about our product warranties, coverage policies, and how to make warranty claims for your Ekhoni Kinbo solar lighting products.',
+//         'Learn about our product warranties, coverage policies, and how to make warranty claims for your ZysLet solar lighting products.',
 // };
 
 export default function WarrantyPage() {
@@ -51,7 +51,7 @@ export default function WarrantyPage() {
                                 <div className="flex-1">
                                     <h3 className="font-semibold text-lg mb-1">Standard Product Warranty</h3>
                                     <p className="text-gray-700">
-                                        All Ekhoni Kinbo solar lighting products come with our standard 2-year warranty
+                                        All ZysLet solar lighting products come with our standard 2-year warranty
                                         against manufacturing defects. This warranty ensures your product will function as
                                         intended under normal use conditions.
                                     </p>
@@ -317,7 +317,7 @@ export default function WarrantyPage() {
 
                     <div className="space-y-6">
                         <p className="text-gray-700">
-                            If you experience an issue with your Ekhoni Kinbo product that you believe is covered by our
+                            If you experience an issue with your ZysLet product that you believe is covered by our
                             warranty, please follow these steps to initiate a warranty claim:
                         </p>
 
@@ -340,7 +340,7 @@ export default function WarrantyPage() {
                                 <h3 className="font-semibold text-lg mb-3">Submit Claim</h3>
                                 <p className="text-gray-600">
                                     Fill out our warranty claim form online or contact our customer service team at
-                                    support@ekhonikinbo.com
+                                    support@zyslet.com
                                 </p>
                             </div>
 
@@ -434,7 +434,7 @@ export default function WarrantyPage() {
                         <div className="border-b border-gray-200 pb-4">
                             <h3 className="font-semibold text-lg mb-2">Is the warranty transferable to another owner?</h3>
                             <p className="text-gray-700">
-                                Ekhoni Kinbo warranties are non-transferable and extend only to the original purchaser with
+                                ZysLet warranties are non-transferable and extend only to the original purchaser with
                                 valid proof of purchase.
                             </p>
                         </div>
@@ -477,7 +477,7 @@ export default function WarrantyPage() {
                                 </svg>
                             </div>
                             <h3 className="font-semibold mb-1">Email Us</h3>
-                            <p className="text-sm text-blue-100">warranty@ekhonikinbo.com</p>
+                            <p className="text-sm text-blue-100">warranty@zyslet.com</p>
                         </div>
                         <div>
                             <div className="bg-white/20 p-4 rounded-lg mb-3">

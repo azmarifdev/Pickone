@@ -24,7 +24,7 @@ const Footer: FC = () => {
     const socialLinks = [
         {
             name: 'Facebook',
-            href: 'https://www.facebook.com/EkhoniKinbo',
+            href: 'https://www.facebook.com/ZysLet',
         },
         {
             name: 'WhatsApp',
@@ -124,9 +124,9 @@ const Footer: FC = () => {
                                     />
                                 </svg>
                                 <a
-                                    href="mailto:support@ekhonikinbo.com"
+                                    href="mailto:support@zyslet.com"
                                     className="text-gray-500 hover:text-blue-600 transition-colors duration-200 break-all sm:break-normal">
-                                    support@ekhonikinbo.com
+                                    support@zyslet.com
                                 </a>
                             </li>
                         </ul>

@@ -22,9 +22,9 @@ const origins = [
    'https://client.azmarif.dev',
    'https://server.azmarif.dev', // <-- ✅ add if used
 
-   'https://admin.ekhonikinbo.com',
-   'https://ekhonikinbo.com',
-   'https://server.ekhonikinbo.com',
+   'https://admin.zyslet.com',
+   'https://zyslet.com',
+   'https://server.zyslet.com',
 ];
 export const corsOptionsDelegate = function (
    req: Request,

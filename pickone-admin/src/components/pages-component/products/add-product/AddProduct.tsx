@@ -1,5 +1,5 @@
 "use client";
-import {useState, type KeyboardEvent} from "react";
+import {useEffect, useState, type KeyboardEvent} from "react";
 import {useForm, FormProvider} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
@@ -66,7 +66,43 @@ export default function ProductAddPage() {
         },
     });
 
-    const {handleSubmit, setValue} = form;
+    const {handleSubmit, setValue, getValues} = form;
+
+    const generateProductCode = (title?: string) => {
+        const now = new Date();
+        const year = now.getFullYear().toString().slice(-2);
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const datePart = `${year}${month}${day}`;
+
+        const titlePart = (title || "ITEM")
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "")
+            .slice(0, 4)
+            .padEnd(4, "X");
+
+        const randomPart = Math.random()
+            .toString(36)
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "")
+            .slice(0, 5)
+            .padEnd(5, "0");
+
+        return `SKU-${datePart}-${titlePart}-${randomPart}`;
+    };
+
+    const handleGenerateProductCode = () => {
+        const generatedCode = generateProductCode(getValues("title"));
+        setValue("code", generatedCode, {shouldValidate: true, shouldDirty: true});
+    };
+
+    useEffect(() => {
+        const existingCode = getValues("code");
+        if (!existingCode) {
+            handleGenerateProductCode();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleMainFeaturesChange = (value: string) => {
         setMainFeatures(value);
@@ -225,10 +261,13 @@ export default function ProductAddPage() {
     };
 
     return (
-        <div className="max-w-5xl">
-            <h1 className="text-2xl font-bold mb-6 text-gray-900">
-                Add New Product
-            </h1>
+        <div className="max-w-5xl space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-50 via-white to-indigo-50 px-6 py-5 shadow-sm">
+                <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
+                <p className="text-sm text-slate-600 mt-1">
+                    Create a premium product listing with complete details, media, and SEO metadata.
+                </p>
+            </div>
 
             <FormProvider {...form}>
                 <form
@@ -241,6 +280,7 @@ export default function ProductAddPage() {
                     <AddProductBasicInformationSection
                         setBundleProducts={setBundleProducts}
                         bundleProducts={bundleProducts}
+                        onGenerateProductCode={handleGenerateProductCode}
                     />
                     <DescriptionBlocksSection />
 
@@ -281,7 +321,7 @@ export default function ProductAddPage() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="px-6 py-2.5 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors shadow-sm">
+                            className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-lg hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed">
                             {isLoading ? "Adding..." : "Add Product"}
                         </button>
                     </div>

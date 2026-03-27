@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import ProductQuantity from './Modal/ProductQuantity';
 import OrderSuccess from './Modal/OrderSuccess';
 import { calculatePrice } from '@/lib/calculatePrice';
@@ -9,6 +10,7 @@ import { trackPurchase as trackGTMPurchase } from '@/lib/gtm';
 import { trackPurchase as trackServerPurchase } from '@/lib/server-tracking';
 import { config } from '@/config/env';
 import { getImageUrl } from '@/lib/imageUtils';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 interface ModalProps {
     isOpen: boolean;
@@ -42,6 +44,8 @@ const Modal: React.FC<ModalProps> = ({
     hasFreeShipping = false,
     bundleProducts = [],
 }) => {
+    const router = useRouter();
+    const { settings } = useSiteSettings();
     const [quantity, setQuantity] = useState(initialQuantity);
     const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
@@ -53,6 +57,10 @@ const Modal: React.FC<ModalProps> = ({
     const [isSuccess, setIsSuccess] = useState(false);
     const [orderError, setOrderError] = useState<string | null>(null);
     const [orderDetails, setOrderDetails] = useState<any>(null);
+    const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [shouldRender, setShouldRender] = useState(isOpen);
+    const [isVisible, setIsVisible] = useState(isOpen);
 
     // Update quantity when initialQuantity prop changes
     useEffect(() => {
@@ -74,12 +82,56 @@ const Modal: React.FC<ModalProps> = ({
 
     // Calculate bundle products total if there are any
     const bundleTotal = bundleProducts?.reduce((sum, item) => sum + (item.price || 0), 0) || 0;
+    const minimumOrderAmount = Number(settings.minimumOrderAmount || 0);
+    const freeShippingThreshold = Number(settings.freeShippingThreshold || 0);
 
     // Handle quantity change and recalculate all prices
     const handleQuantityChange = (newQuantity: number) => {
         if (newQuantity < 1) return;
         setQuantity(newQuantity);
     };
+
+    const resetForm = useCallback(() => {
+        setQuantity(1);
+        setPhone('');
+        setName('');
+        setAddress('');
+        setPaymentMethod('cod');
+        setDeliveryArea('inside_dhaka');
+        setIsSuccess(false);
+        setOrderError(null);
+        setOrderDetails(null);
+    }, []);
+
+    const handleModalClose = useCallback(() => {
+        if (closeTimeoutRef.current) {
+            clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+        }
+
+        if (isSuccess) {
+            resetForm();
+        }
+
+        onClose();
+    }, [isSuccess, onClose, resetForm]);
+
+    const handleContinueShopping = useCallback(() => {
+        handleModalClose();
+    }, [handleModalClose]);
+
+    const handleBackToHome = useCallback(() => {
+        handleModalClose();
+        router.push('/');
+    }, [handleModalClose, router]);
+
+    const handleWhatsAppConfirm = useCallback(
+        (whatsAppUrl: string) => {
+            handleModalClose();
+            window.open(whatsAppUrl, '_blank', 'noopener,noreferrer');
+        },
+        [handleModalClose]
+    );
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -92,6 +144,14 @@ const Modal: React.FC<ModalProps> = ({
         const productSubtotal = parseFloat((salePrice * quantity).toFixed(0));
         const bundleSubtotal = bundleTotal;
         const combinedSubtotal = productSubtotal + bundleSubtotal;
+        const isThresholdFreeShipping =
+            freeShippingThreshold > 0 && combinedSubtotal >= freeShippingThreshold;
+
+        if (minimumOrderAmount > 0 && combinedSubtotal < minimumOrderAmount) {
+            setOrderError(`Minimum order amount is ৳${minimumOrderAmount.toFixed(0)}.`);
+            setIsProcessing(false);
+            return;
+        }
 
         // Use the same free shipping logic that we're using for display
         // This ensures consistent behavior between what's shown to users and what's sent to the server
@@ -100,7 +160,8 @@ const Modal: React.FC<ModalProps> = ({
         const freeShippingApplies =
             product?.is_free_shipping ||
             (hasFreeShipping && bundleProducts && bundleProducts.length > 0) ||
-            (bundleProducts && bundleProducts.length > 0);
+            (bundleProducts && bundleProducts.length > 0) ||
+            isThresholdFreeShipping;
 
         const orderDeliveryCharge = freeShippingApplies ? 0 : deliveryCharges[deliveryArea as keyof typeof deliveryCharges];
         const totalPrice = parseFloat((combinedSubtotal + orderDeliveryCharge).toFixed(0));
@@ -272,9 +333,8 @@ const Modal: React.FC<ModalProps> = ({
                 // --- END TRACKING EVENTS ---
 
                 // Reset form after 30 seconds of showing success message
-                setTimeout(() => {
-                    resetForm();
-                    onClose();
+                closeTimeoutRef.current = setTimeout(() => {
+                    handleModalClose();
                 }, 30000);
             } else {
                 setOrderError(result.message || 'Failed to create order. Please try again.');
@@ -288,17 +348,35 @@ const Modal: React.FC<ModalProps> = ({
         }
     };
 
-    const resetForm = () => {
-        setQuantity(1);
-        setPhone('');
-        setName('');
-        setAddress('');
-        setPaymentMethod('cod');
-        setDeliveryArea('inside_dhaka');
-        setIsSuccess(false);
-        setOrderError(null);
-        setOrderDetails(null);
-    };
+    useEffect(() => {
+        return () => {
+            if (closeTimeoutRef.current) {
+                clearTimeout(closeTimeoutRef.current);
+            }
+            if (animationTimeoutRef.current) {
+                clearTimeout(animationTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isOpen) {
+            setShouldRender(true);
+            requestAnimationFrame(() => setIsVisible(true));
+            return;
+        }
+
+        setIsVisible(false);
+        animationTimeoutRef.current = setTimeout(() => {
+            setShouldRender(false);
+        }, 220);
+
+        return () => {
+            if (animationTimeoutRef.current) {
+                clearTimeout(animationTimeoutRef.current);
+            }
+        };
+    }, [isOpen]);
 
     // Calculate subtotal and savings based on quantity
     const productSubtotal = salePrice * quantity || 0;
@@ -312,7 +390,11 @@ const Modal: React.FC<ModalProps> = ({
     const isFreeShipping =
         product?.is_free_shipping ||
         (hasFreeShipping && bundleProducts && bundleProducts.length > 0) ||
-        (bundleProducts && bundleProducts.length > 0);
+        (bundleProducts && bundleProducts.length > 0) ||
+        (freeShippingThreshold > 0 && productSubtotal + bundleTotal >= freeShippingThreshold);
+
+    const isBelowMinimumOrder =
+        minimumOrderAmount > 0 && productSubtotal + bundleTotal < minimumOrderAmount;
 
     // Calculate delivery charge (0 if free shipping)
     const deliveryCharge = isFreeShipping ? 0 : deliveryCharges[deliveryArea as keyof typeof deliveryCharges];
@@ -331,14 +413,21 @@ const Modal: React.FC<ModalProps> = ({
     // Check if product has discount
     const hasDiscount = product?.discount && product.discount > 0;
 
-    if (!isOpen) return null;
+    if (!shouldRender) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center py-6 px-3">
-            <div className="absolute inset-0 bg-black bg-opacity-60" onClick={onClose}></div>
-            <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-3 py-4 sm:px-5">
+            <div
+                className={`absolute inset-0 bg-black/60 backdrop-blur-[2px] transition-opacity duration-200 ${
+                    isVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+                onClick={handleModalClose}></div>
+            <div
+                className={`relative bg-white rounded-3xl border border-white/70 shadow-[0_20px_60px_rgba(15,23,42,0.25)] max-w-md w-full max-h-[92vh] overflow-hidden flex flex-col transform transition-all duration-200 ${
+                    isVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3'
+                }`}>
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-                <CloseButton onClose={onClose} />
+                <CloseButton onClose={handleModalClose} />
 
                 {isSuccess ? (
                     <OrderSuccess
@@ -346,9 +435,12 @@ const Modal: React.FC<ModalProps> = ({
                         savings={savings}
                         hasProduct={!!product}
                         orderDetails={orderDetails}
+                        onContinueShopping={handleContinueShopping}
+                        onBackToHome={handleBackToHome}
+                        onWhatsAppConfirm={handleWhatsAppConfirm}
                     />
                 ) : (
-                    <div className="px-4 pt-6 pb-4 overflow-y-auto custom-scrollbar">
+                    <div className="px-4 sm:px-5 pt-7 pb-5 overflow-y-auto custom-scrollbar">
                         {orderError && (
                             <div className="bg-red-50 border-l-4 border-red-500 p-2 mb-3 rounded-md">
                                 <p className="text-xs text-red-700">{orderError}</p>
@@ -769,6 +861,16 @@ const Modal: React.FC<ModalProps> = ({
                                         <span className="font-medium">৳{deliveryCharge.toFixed(0)}</span>
                                     )}
                                 </div>
+                                {freeShippingThreshold > 0 && !isFreeShipping && (
+                                    <p className="text-[11px] text-emerald-700 mt-1">
+                                        Add ৳{(freeShippingThreshold - (productSubtotal + bundleTotal)).toFixed(0)} more for free shipping.
+                                    </p>
+                                )}
+                                {isBelowMinimumOrder && (
+                                    <p className="text-[11px] text-red-600 mt-1">
+                                        Minimum order amount: ৳{minimumOrderAmount.toFixed(0)}
+                                    </p>
+                                )}
                                 <div className="flex justify-between text-sm font-bold pt-1">
                                     <span>Total:</span>
                                     <span className="text-blue-700">৳{finalTotal}</span>
@@ -778,9 +880,9 @@ const Modal: React.FC<ModalProps> = ({
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                disabled={isProcessing}
+                                disabled={isProcessing || isBelowMinimumOrder}
                                 className={`w-full py-2.5 rounded-md text-white font-medium flex items-center justify-center transition-all ${
-                                    isProcessing
+                                    isProcessing || isBelowMinimumOrder
                                         ? 'bg-blue-400 cursor-not-allowed'
                                         : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg'
                                 }`}>
@@ -805,6 +907,8 @@ const Modal: React.FC<ModalProps> = ({
                                         </svg>
                                         Processing...
                                     </>
+                                ) : isBelowMinimumOrder ? (
+                                    `Minimum order ৳${minimumOrderAmount.toFixed(0)}`
                                 ) : (
                                     <>
                                         <svg
@@ -843,7 +947,7 @@ interface CloseButtonProps {
 const CloseButton: React.FC<CloseButtonProps> = ({ onClose }) => (
     <button
         onClick={onClose}
-        className="absolute top-3 right-3 text-white hover:text-gray-200 bg-black bg-opacity-20 hover:bg-opacity-30 rounded-full p-1 z-10 transition-all"
+        className="absolute top-3 right-3 text-white hover:text-white bg-slate-900/35 hover:bg-slate-900/55 rounded-full p-1.5 z-10 transition-all backdrop-blur"
         aria-label="Close modal">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

@@ -1,23 +1,17 @@
 "use client";
 
 import Loader from "@/components/reusable/Loader/Loader";
-import {useLoadUserQuery} from "@/redux/api/authApi";
-import {useAppSelector} from "@/redux/hooks";
 import {useRouter} from "next/navigation";
+import {useEffect} from "react";
 
-const Dashboard = () => {
-    const {data: profileData, isLoading} = useLoadUserQuery({});
-    const {user} = useAppSelector((state) => state.auth);
-
+const Page = () => {
     const router = useRouter();
 
-    if (isLoading) return <Loader />;
+    useEffect(() => {
+        router.replace("/login");
+    }, [router]);
 
-    if (user.role === "admin" || profileData?.data?.role == "admin") {
-        router.push("/dashboard");
-    } else router.push("/login");
-
-    return null;
+    return <Loader />;
 };
 
-export default Dashboard;
+export default Page;

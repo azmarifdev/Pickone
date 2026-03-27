@@ -15,7 +15,7 @@ const FAQ = () => {
                             <p>We offer two types of warranty coverage:</p>
                             <ul className="list-disc ml-5 mt-2">
                                 <li>
-                                    <strong>Standard 2-Year Warranty:</strong> All Ekhoni Kinbo solar lighting products come
+                                    <strong>Standard 2-Year Warranty:</strong> All ZysLet solar lighting products come
                                     with our standard 2-year warranty against manufacturing defects.
                                 </li>
                                 <li>
@@ -67,7 +67,7 @@ const FAQ = () => {
                             </li>
                             <li>
                                 Fill out our warranty claim form online or contact our customer service at
-                                warranty@ekhonikinbo.com
+                                warranty@zyslet.com
                             </li>
                             <li>Our team will review your claim within 3-5 business days</li>
                             <li>If approved, we'll arrange for a repair, replacement, or refund as appropriate</li>
@@ -103,7 +103,7 @@ const FAQ = () => {
                     question: 'How do I place an order?',
                     answer: (
                         <div>
-                            <p>Placing an order with Ekhoni Kinbo is easy:</p>
+                            <p>Placing an order with ZysLet is easy:</p>
                             <ol className="list-decimal ml-5 mt-2 space-y-2">
                                 <li>Browse our products and add items to your cart</li>
                                 <li>Click on the cart icon in the top right corner</li>
@@ -150,7 +150,7 @@ const FAQ = () => {
                         <p>
                             You can modify or cancel your order within 1 hour of placing it by contacting our customer
                             service team. Once an order has entered the processing stage, we cannot guarantee that changes
-                            can be made. Please contact us as soon as possible at support@ekhonikinbo.com with your order
+                            can be made. Please contact us as soon as possible at support@zyslet.com with your order
                             number.
                         </p>
                     ),
@@ -245,7 +245,7 @@ const FAQ = () => {
                     question: 'How do I return a product?',
                     answer: (
                         <ol className="list-decimal ml-5 space-y-2">
-                            <li>Contact our customer service team at support@ekhonikinbo.com to request a return</li>
+                            <li>Contact our customer service team at support@zyslet.com to request a return</li>
                             <li>Include your order number and reason for return</li>
                             <li>Our team will provide you with return instructions and a return authorization number</li>
                             <li>Package the item securely with all original packaging</li>
@@ -270,7 +270,7 @@ const FAQ = () => {
                     answer: (
                         <p>
                             If you receive a defective product, please contact our customer service team immediately at
-                            support@ekhonikinbo.com with photos of the defect and your order number. We'll arrange a
+                            support@zyslet.com with photos of the defect and your order number. We'll arrange a
                             replacement or refund, depending on your preference and product availability. For defective
                             products, we'll also cover the return shipping costs.
                         </p>
@@ -360,7 +360,7 @@ const FAQ = () => {
                     answer: (
                         <div>
                             <p>
-                                All Ekhoni Kinbo products come with a 2-year warranty against manufacturing defects. This
+                                All ZysLet products come with a 2-year warranty against manufacturing defects. This
                                 covers:
                             </p>
                             <ul className="list-disc ml-5 mt-2">
@@ -381,7 +381,7 @@ const FAQ = () => {
                     answer: (
                         <ol className="list-decimal ml-5 space-y-2">
                             <li>
-                                Contact our customer service at warranty@ekhonikinbo.com with your order number and purchase
+                                Contact our customer service at warranty@zyslet.com with your order number and purchase
                                 proof
                             </li>
                             <li>Provide clear photos or videos showing the defect</li>
@@ -397,7 +397,7 @@ const FAQ = () => {
                         <p>
                             Yes, we provide comprehensive after-sales support for all our products. Our support team can
                             assist with product advice, installation guidance, troubleshooting, and warranty claims. You can
-                            contact us via email at support@ekhonikinbo.com, phone at +880 1810-011145 (Mon-Fri, 9AM-6PM), or
+                            contact us via email at support@zyslet.com, phone at +880 1810-011145 (Mon-Fri, 9AM-6PM), or
                             through the live chat feature on our website.
                         </p>
                     ),

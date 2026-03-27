@@ -28,7 +28,7 @@ export function initMetaPixel() {
             window.fbq.callMethod = null;
             window.fbq.loaded = true;
             window.fbq.version = '2.0';
-            window.fbq.agent = 'pickone';
+            window.fbq.agent = 'zyslet';
         }
 
         // Enable debug mode in development

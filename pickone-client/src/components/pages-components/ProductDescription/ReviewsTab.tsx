@@ -159,7 +159,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({ reviews, productId }) => {
                         />
                     </svg>
                 </div>
-                <h4 className="text-xl font-semibold text-blue-800">Ekhoni Kinbo Guarantee</h4>
+                <h4 className="text-xl font-semibold text-blue-800">ZysLet Guarantee</h4>
             </div>
             <ul className="space-y-3">
                 {['100% authentic products', '30-day money back', '2-year warranty'].map((item, index) => (

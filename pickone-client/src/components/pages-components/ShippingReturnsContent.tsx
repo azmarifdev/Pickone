@@ -198,7 +198,7 @@ const ShippingReturnsContent: React.FC = () => {
                                     <div>
                                         <h4 className="font-medium">Request a Return</h4>
                                         <p className="text-gray-600 mt-1">
-                                            Contact our customer service team at support@ekhonikinbo.com with your order
+                                            Contact our customer service team at support@zyslet.com with your order
                                             number, reason for return, and photos if applicable.
                                         </p>
                                     </div>
@@ -376,7 +376,7 @@ const ShippingReturnsContent: React.FC = () => {
                             <div className="bg-yellow-50 p-5 rounded-lg border border-yellow-100">
                                 <p className="text-gray-700">
                                     If you receive a damaged or defective item, please contact our customer service team
-                                    immediately at <span className="text-blue-600 font-medium">support@ekhonikinbo.com</span>{' '}
+                                    immediately at <span className="text-blue-600 font-medium">support@zyslet.com</span>{' '}
                                     with photos of the defect and your order number. We will arrange a replacement or refund,
                                     depending on your preference and product availability.
                                 </p>
@@ -415,8 +415,8 @@ const ShippingReturnsContent: React.FC = () => {
                             </div>
                             <h3 className="font-medium mb-2">Email</h3>
                             <p className="text-sm text-gray-500 mb-2">Get a response within 24 hours</p>
-                            <a href="mailto:support@ekhonikinbo.com" className="text-blue-600 hover:underline">
-                                support@ekhonikinbo.com
+                            <a href="mailto:support@zyslet.com" className="text-blue-600 hover:underline">
+                                support@zyslet.com
                             </a>
                         </div>
                         <div className="bg-white p-5 rounded-lg shadow-sm text-center">

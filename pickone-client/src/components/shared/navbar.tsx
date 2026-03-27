@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useRef, FC, ChangeEvent, useCallback, memo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-// import Logo from '../reusable/logo';
+import BrandLogo from '../reusable/BrandLogo';
 import { SideNav } from './SideNav';
 import SideCart from './SideCart';
 import { useCart } from '@/components/context/CartContext';
@@ -12,6 +12,7 @@ import useCategory from '@/hooks/useCategory';
 import { calculatePrice } from '@/lib/calculatePrice';
 import { config } from '@/config/env';
 import { getImageUrl } from '@/lib/imageUtils';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 // Remove the direct import of useSearchParams
 
 // Add interface for search results
@@ -31,6 +32,7 @@ interface NavLink {
 }
 
 const Navbar: FC = () => {
+    const { settings } = useSiteSettings();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
@@ -376,6 +378,11 @@ const Navbar: FC = () => {
 
     return (
         <div>
+            {settings.enableAnnouncementBar && settings.announcementText && (
+                <div className="fixed top-0 left-0 right-0 z-[60] bg-amber-500 text-white text-center text-xs md:text-sm py-1 px-3">
+                    {settings.announcementText}
+                </div>
+            )}
             {/* Main Navbar - Fixed at top */}
             <nav
                 className={`bg-white py-3 fixed w-full top-0 z-50 transition-all duration-300 ${
@@ -386,16 +393,7 @@ const Navbar: FC = () => {
                         {/* Left Section: Logo and desktop menu */}
                         <div className="flex items-center space-x-4">
                             {/* Logo */}
-                            <Link href="/" className="flex items-center" onClick={closeMenu}>
-                                <Image
-                                    src="/images/logo/ekhoni_kinbo_logo-trans.png"
-                                    alt="Ekhoni Kinbo Logo"
-                                    width={160}
-                                    height={50}
-                                    sizes="160px"
-                                    className="h-8 w-auto"
-                                />
-                            </Link>
+                            <BrandLogo onClick={closeMenu} />
 
                             {/* Desktop Menu Links */}
                             <div className="hidden lg:flex items-center space-x-1">

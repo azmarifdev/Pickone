@@ -136,6 +136,10 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, 
     };
 
     const statusInfo = getStatusColor(order?.status);
+    const statusLabel =
+        order?.status === "cancelled"
+            ? "Cancel"
+            : order?.status?.charAt(0)?.toUpperCase() + order?.status?.slice(1);
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -157,7 +161,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, 
                             variant="outline"
                             className={`${statusInfo.class} px-3 py-1.5 flex items-center gap-2 font-medium`}>
                             {statusInfo.icon}
-                            {order?.status?.charAt(0)?.toUpperCase() + order?.status?.slice(1)}
+                            {statusLabel}
                         </Badge>
                     </div>
                 </DialogHeader>

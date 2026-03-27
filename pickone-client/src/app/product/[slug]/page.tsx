@@ -24,21 +24,21 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
         if (!product) {
             return {
-                title: 'Product Not Found | Ekhoni Kinbo',
+                title: 'Product Not Found | ZysLet',
                 description: 'The requested product could not be found.',
             };
         }
 
-        const description = product.meta_desc || product.desc || `${product.title} - Shop at Ekhoni Kinbo`;
+        const description = product.meta_desc || product.desc || `${product.title} - Shop at ZysLet`;
 
         const keywords = Array.isArray(product.meta_keywords) ? product.meta_keywords.join(', ') : '';
 
         return {
-            title: `${product.title} | Ekhoni Kinbo`,
+            title: `${product.title} | ZysLet`,
             description,
             keywords,
             openGraph: {
-                title: `${product.title} | Ekhoni Kinbo`,
+                title: `${product.title} | ZysLet`,
                 description,
                 images: [
                     {
@@ -52,14 +52,14 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
             },
             twitter: {
                 card: 'summary_large_image',
-                title: `${product.title} | Ekhoni Kinbo`,
+                title: `${product.title} | ZysLet`,
                 description,
                 images: [product.thumbnail || ''],
             },
         };
     } catch (error: any) {
         return {
-            title: 'Error | Ekhoni Kinbo',
+            title: 'Error | ZysLet',
             description: 'An unexpected error occurred while generating metadata.',
         };
     }

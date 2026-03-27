@@ -7,6 +7,7 @@ import { ReviewRoutes } from '../modules/review/review.route';
 import { UserRoutes } from '../modules/user/user.route';
 import { TrackingRoutes } from '../modules/tracking/tracking.route';
 import { FacebookEventsRoutes } from '../modules/facebook-events/facebook-events.route';
+import { SiteSettingsRoutes } from '../modules/site-settings/site-settings.route';
 
 const router = express.Router();
 
@@ -43,6 +44,10 @@ const moduleRoutes = [
    {
       path: '/facebook-events',
       routes: FacebookEventsRoutes,
+   },
+   {
+      path: '/site-settings',
+      routes: SiteSettingsRoutes,
    },
 ];
 

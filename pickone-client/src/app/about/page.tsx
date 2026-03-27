@@ -3,7 +3,7 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-4 py-12">
             {/* Hero Section */}
             <div className="mb-16 text-center">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">About Ekhoni Kinbo</h1>
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">About ZysLet</h1>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                     Your trusted partner for quality products across diverse categories. We are a global company with
                     operations in both Asia and Bangladesh, committed to bringing you the best products at competitive
@@ -36,7 +36,7 @@ export default function AboutPage() {
 
                     <div className="space-y-6">
                         <p className="text-gray-700 text-lg leading-relaxed">
-                            Ekhoni Kinbo was founded with a vision to make quality products accessible to everyone through
+                            ZysLet was founded with a vision to make quality products accessible to everyone through
                             convenient online shopping. What started as a passion for connecting customers with great
                             products has grown into a global enterprise that spans across continents, bringing diverse
                             product categories to customers worldwide.
@@ -283,7 +283,7 @@ export default function AboutPage() {
                                 />
                             </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-800">Why Choose Ekhoni Kinbo</h2>
+                        <h2 className="text-2xl font-bold text-gray-800">Why Choose ZysLet</h2>
                     </div>
 
                     <div className="space-y-6">
@@ -417,7 +417,7 @@ export default function AboutPage() {
                                 </svg>
                             </div>
                             <h3 className="font-semibold mb-1">Email Us</h3>
-                            <p className="text-sm text-blue-100">info@ekhonikinbo.com</p>
+                            <p className="text-sm text-blue-100">info@zyslet.com</p>
                         </div>
                         <div>
                             <div className="bg-white/20 p-4 rounded-lg mb-3">

@@ -15,14 +15,19 @@ interface BundleProduct {
 export function AddProductBasicInformationSection({
     setBundleProducts,
     bundleProducts = [],
+    onGenerateProductCode,
 }: {
     setBundleProducts: React.Dispatch<React.SetStateAction<BundleProduct[]>>;
     bundleProducts?: BundleProduct[];
+    onGenerateProductCode: () => void;
 }) {
     const {
         register,
+        watch,
         formState: {errors},
     } = useFormContext();
+
+    const currentCode = watch("code");
 
     const {data: categories} = useCategoryListQuery();
 
@@ -40,7 +45,7 @@ export function AddProductBasicInformationSection({
     };
 
     return (
-        <section className="bg-white p-6 rounded-lg shadow-sm border-2 border-gray-200">
+        <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
             <SectionTitle title="Basic Information" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormInput
@@ -49,12 +54,41 @@ export function AddProductBasicInformationSection({
                     placeholder="Enter product title"
                     required
                 />
-                <FormInput
-                    name="code"
-                    label="Product Code"
-                    placeholder="Enter product code"
-                    required
-                />
+                <div>
+                    <label htmlFor="code" className="text-gray-700 text-base">
+                        Product Code
+                        <span className="text-red-700 ml-1">*</span>
+                    </label>
+                    <div className="mt-1.5 flex gap-2">
+                        <input
+                            id="code"
+                            type="text"
+                            placeholder="Auto-generated product code"
+                            {...register("code")}
+                            className="border border-slate-400 rounded-lg focus:outline-primary w-full h-11 px-4 py-[18px] bg-transparent text-gray-700"
+                        />
+                        <button
+                            type="button"
+                            onClick={onGenerateProductCode}
+                            className="h-11 whitespace-nowrap px-4 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors text-sm font-medium">
+                            Generate New
+                        </button>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1.5">
+                        Ecommerce-style SKU format: <span className="font-medium">SKU-YYMMDD-XXXX-XXXXX</span>
+                    </p>
+                    {currentCode && (
+                        <p className="text-xs text-emerald-600 mt-1">
+                            Current code: <span className="font-semibold">{currentCode}</span>
+                        </p>
+                    )}
+                    {errors.code && (
+                        <p className="mt-1 text-sm text-red-600">
+                            {typeof errors.code?.message === "string" &&
+                                errors.code.message}
+                        </p>
+                    )}
+                </div>
 
                 <div>
                     <label

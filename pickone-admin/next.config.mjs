@@ -1,7 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: '/admin',
-    assetPrefix: '/admin',
+    async redirects() {
+        return [
+            {
+                source: '/admin',
+                destination: '/',
+                permanent: true,
+            },
+            {
+                source: '/admin/:path*',
+                destination: '/:path*',
+                permanent: true,
+            },
+        ];
+    },
     images: {
         remotePatterns: [
             {

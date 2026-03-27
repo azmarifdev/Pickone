@@ -49,7 +49,7 @@ const baseQueryWithErrorHandling: BaseQueryFn<
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: baseQueryWithErrorHandling,
-    tagTypes: ['users', 'product', 'category', 'orders', 'reviews'],
+    tagTypes: ['users', 'product', 'category', 'orders', 'reviews', 'settings'],
     endpoints: () => ({}),
 });
 // Export hooks for usage in functional components

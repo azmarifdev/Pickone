@@ -731,7 +731,7 @@ export default function PrivacyPage() {
                                 </svg>
                             </div>
                             <h3 className="font-semibold mb-1">Email Us</h3>
-                            <p className="text-sm text-blue-100">privacy@ekhonikinbo.com</p>
+                            <p className="text-sm text-blue-100">privacy@zyslet.com</p>
                         </div>
                         <div>
                             <div className="bg-white/20 p-4 rounded-lg mb-3">

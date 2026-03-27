@@ -64,7 +64,7 @@ const FeatureSection = () => {
     return (
         <section className="mb-2">
             <div className="text-center mb-10">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Why Choose Ekhoni Kinbo</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Why Choose ZysLet</h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                     We are committed to providing our customers with the best shopping experience possible
                 </p>

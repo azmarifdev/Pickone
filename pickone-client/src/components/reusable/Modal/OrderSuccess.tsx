@@ -1,17 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { buildOrderWhatsAppUrl } from '@/lib/whatsapp';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 interface OrderSuccessProps {
     savingsPercentage: number;
     savings: number;
     hasProduct: boolean;
     orderDetails?: any; // Add order details from API response
+    onContinueShopping: () => void;
+    onBackToHome: () => void;
+    onWhatsAppConfirm: any;
 }
 
-const OrderSuccess: React.FC<OrderSuccessProps> = ({ savingsPercentage, savings, hasProduct, orderDetails }) => {
+const OrderSuccess: React.FC<OrderSuccessProps> = ({
+    savingsPercentage,
+    savings,
+    hasProduct,
+    orderDetails,
+    onContinueShopping,
+    onBackToHome,
+    onWhatsAppConfirm,
+}) => {
+    const { settings } = useSiteSettings();
+    const [isCopied, setIsCopied] = useState(false);
+    const orderId = orderDetails?._id || orderDetails?.id || '';
+
+    const copyOrderId = async () => {
+        if (!orderId) return;
+
+        try {
+            await navigator.clipboard.writeText(orderId);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        } catch {
+            const textArea = document.createElement('textarea');
+            textArea.value = orderId;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        }
+    };
+
+    const handleWhatsAppConfirmation = () => {
+        if (!orderId) return;
+
+        const whatsAppUrl = buildOrderWhatsAppUrl(orderId, settings);
+        onWhatsAppConfirm(whatsAppUrl);
+    };
+
     return (
-        <div className="text-center py-4">
-            <div className="mb-2">
-                <div className="mx-auto w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+        <div className="text-center py-5 sm:py-6 px-2 sm:px-3">
+            <div className="mb-3">
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center ring-4 ring-green-50">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-8 w-8 text-green-500"
@@ -22,8 +65,8 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({ savingsPercentage, savings,
                     </svg>
                 </div>
             </div>
-            <h3 className="text-xl font-bold text-green-600 mb-2">Order Placed Successfully!</h3>
-            <div className="bg-green-50 p-3 rounded-lg border border-green-100 mb-3 max-w-md mx-auto">
+            <h3 className="text-2xl font-bold text-green-600 mb-2">Order Placed Successfully!</h3>
+            <div className="bg-gradient-to-b from-green-50 to-white p-4 sm:p-5 rounded-xl border border-green-100 mb-4 max-w-md mx-auto shadow-sm">
                 <p className="text-gray-700 text-sm mb-1">
                     Thank you for your order. A confirmation SMS will be sent to your phone shortly.
                 </p>
@@ -31,14 +74,22 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({ savingsPercentage, savings,
                     Your order will be delivered within 24-48 hours. Please keep your phone on.
                 </p>
                 {orderDetails && (
-                    <div className="mt-2 p-2 bg-white rounded-md border border-green-100 text-left">
+                    <div className="mt-3 p-3 bg-white rounded-lg border border-green-100 text-left max-h-[42vh] overflow-y-auto">
                         {/* Order ID and Status Section */}
                         <div className="mb-2">
                             <div className="flex justify-between items-center">
-                                <p className="text-xs font-medium text-gray-700">
-                                    Order ID:
-                                    <span className="ml-1 font-bold text-green-700">{orderDetails._id}</span>
-                                </p>
+                                <div className="flex items-center gap-2">
+                                    <p className="text-xs font-medium text-gray-700">
+                                        Order ID:
+                                        <span className="ml-1 font-bold text-green-700">{orderId}</span>
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={copyOrderId}
+                                        className="text-[10px] px-2 py-1 rounded border border-green-200 text-green-700 hover:bg-green-50 transition-colors">
+                                        {isCopied ? 'Copied!' : 'Copy ID'}
+                                    </button>
+                                </div>
                                 <p className="text-xs font-semibold text-gray-800">
                                     Status: <span className="font-medium capitalize">{orderDetails.status}</span>
                                 </p>
@@ -117,8 +168,33 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({ savingsPercentage, savings,
                     </div>
                 )}
             </div>
+            <div className="mt-4 max-w-md mx-auto space-y-2.5">
+                {orderId && (
+                    <button
+                        type="button"
+                        onClick={handleWhatsAppConfirmation}
+                        className="w-full px-5 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium">
+                        Confirm on WhatsApp
+                    </button>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <button
+                        type="button"
+                        onClick={onBackToHome}
+                        className="w-full px-4 py-3 bg-white text-blue-700 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors text-sm font-medium">
+                        Back to Home
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onContinueShopping}
+                        className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium">
+                        Continue Shopping
+                    </button>
+                </div>
+            </div>
             {hasProduct && (
-                <div className="mt-2 bg-blue-50 p-2 rounded-lg max-w-md mx-auto">
+                <div className="mt-3 bg-blue-50 p-2.5 rounded-lg max-w-md mx-auto border border-blue-100">
                     <p className="font-medium text-blue-700 text-sm">You saved {savingsPercentage}% on this purchase!</p>
                     <p className="text-xs text-blue-600">Total savings: ৳{savings.toFixed(0)}</p>
                 </div>
