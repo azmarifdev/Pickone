@@ -1,229 +1,144 @@
-# PickOne Production Deployment Guide
+# Zyslet Commerce Platform (PickOne)
 
-This project is configured for production deployment on VPS with Docker and HTTPS SSL certificates.
+Production-ready full-stack eCommerce platform with separate **Client**, **Admin**, and **Server** applications.
 
-## 🌐 Domains Configuration
+This project was re-architected for real deployment and portfolio presentation, with a strong focus on domain separation, cloud media handling, analytics, security, and operational reliability.
 
-The project uses 3 domains:
+## Live Architecture
 
--   **Admin Panel**: https://admin.azmarif.dev
--   **Client App**: https://client.azmarif.dev
--   **API Server**: https://server.azmarif.dev
+- Client: `https://zyslet.com`
+- Admin: `https://admin.zyslet.com`
+- API Server: `https://server.zyslet.com`
+- Fallback API (during SSL/setup windows): `https://pickone-server.onrender.com`
 
-All domains should point to VPS IP: `103.213.38.213`
+## Repositories / Apps
 
-## � Quick Deployment
+- `pickone-client` (Next.js 14): customer-facing storefront
+- `pickone-admin` (Next.js 14): admin dashboard and content/order management
+- `pickone-server` (Express + TypeScript + MongoDB): REST API, auth, product/order/review logic
 
-### 1. Pre-deployment Check
+## Key Features Implemented
 
+### Customer App (Client)
+- Product listing with filters, pagination, and improved UX flow
+- Product details with gallery, specs, reviews, related products
+- Real-time pricing display (discount/original/savings)
+- Cart and order journey improvements
+- Better loading/error boundaries for production behavior
+- Cloudinary-based image URL handling and optimization-friendly rendering
+
+### Admin Panel
+- Authentication flow + protected dashboard routes
+- Functional analytics cards and monthly performance visualization
+- Review management improvements (data correctness + usability)
+- Product CRUD flows with media handling
+- Demo-friendly login UX for portfolio reviewers
+
+### Backend API
+- Module-based architecture: `auth`, `user`, `product`, `order`, `review`, `tracking`, `site-settings`, etc.
+- JWT auth with cookie strategy for cross-subdomain deployment
+- Cloudinary integration for product/review images
+- CORS allowlist strategy for `zyslet.com`, `admin.zyslet.com`, and preview domains
+- Security/performance hardening:
+  - `helmet`
+  - `compression`
+  - `express-rate-limit`
+  - request body size controls
+- Query and model optimizations (`lean()`, selective fields, indexes on hot paths)
+
+## Tech Stack
+
+- Frontend: Next.js 14, React 18, TypeScript, Tailwind CSS
+- Admin state/data: Redux Toolkit + RTK Query
+- Backend: Node.js, Express.js, TypeScript
+- Database: MongoDB Atlas + Mongoose
+- Media: Cloudinary
+- Analytics: GTM + Meta Pixel + server-side Facebook Conversion API hooks
+- Deployment:
+  - Client/Admin: Vercel
+  - Server: Render
+  - Domain + DNS: custom subdomains (`zyslet.com` ecosystem)
+
+## What I Improved (Production Work Scope)
+
+- Split and aligned project for independent deployment of client/admin/server
+- Standardized environment variables across apps and examples
+- Migrated media flow to Cloudinary and fixed image rendering issues end-to-end
+- Added seed flow for initial admin bootstrap in new MongoDB cluster
+- Fixed cross-origin login issues (CORS/cookie config for multi-domain setup)
+- Added keep-alive strategy for Render cold-start mitigation
+- Fixed admin login redirect/state issues
+- Improved product list and product details UX for customer app
+- Added dashboard data functionality and review flow enhancements in admin
+
+## Challenges Faced and How They Were Solved
+
+1. CORS login failures between Admin and API  
+   - Problem: browser blocked login requests due to missing/invalid CORS headers in cross-domain setup.  
+   - Solution: implemented dynamic CORS allowlist middleware and aligned env origins per deployment.
+
+2. Cross-subdomain authentication persistence  
+   - Problem: successful login but dashboard route guard still redirected to login.  
+   - Solution: adjusted cookie configuration (domain/same-site/secure behavior) for `.zyslet.com` usage.
+
+3. Render cold starts affecting API responsiveness  
+   - Problem: service slept after inactivity, causing delayed first response.  
+   - Solution: configured periodic keep-alive workflow/script and fallback URL strategy during migration.
+
+4. Images not rendering in admin/client  
+   - Problem: mixed image URL formats (IDs/relative/absolute) and inconsistent media handling.  
+   - Solution: introduced robust image URL utility + Cloudinary-aware transformation logic.
+
+5. New database bootstrap with no initial admin  
+   - Problem: fresh cluster had no privileged user to access admin panel.  
+   - Solution: prepared and executed seed script for initial admin creation.
+
+## Local Development
+
+### 1) Server
 ```bash
-# Check system requirements and configuration
-./pre-deploy-check.sh
+cd pickone-server
+npm install
+npm run dev
 ```
+Runs by default on `http://localhost:5000` (depending on `.env`).
 
-### 2. Deploy Application
-
+### 2) Admin
 ```bash
-# Deploy with automatic SSL setup
-./deploy.sh
+cd pickone-admin
+npm install
+npm run dev
 ```
+Runs on `http://localhost:3000`.
 
-### 3. Health Check
-
+### 3) Client
 ```bash
-# Verify all services are running
-./health-check.sh
+cd pickone-client
+npm install
+npm run dev
 ```
+Runs on `http://localhost:3000` (use different port if both Next apps run together).
 
-### 4. SSL Management
+## Environment Configuration
 
-```bash
-# Renew SSL certificates (automated via cron)
-./ssl-renew.sh
-```
+- Root sample: [`.env.example`](./.env.example)
+- Server sample: [`pickone-server/.env.example`](./pickone-server/.env.example)
 
-## �📋 Prerequisites
+Important production values include:
+- MongoDB Atlas connection string (`DATABASE_URL`)
+- Cloudinary credentials
+- Domain URLs (`CLIENT_URL`, `ADMIN_URL`, `API_URL`)
+- JWT secrets
+- CORS allowlist and cookie domain
 
--   VPS with Ubuntu/Linux
--   Docker & Docker Compose installed
--   Domain DNS records configured
--   Ports 80, 443 open on firewall
+## Demo Access (Portfolio Review)
 
-## 🚀 Quick Deployment
+Admin demo account:
+- Email: `zyslet@gmail.com`
+- Password: `@zyslet1234`
 
-### 1. Pre-deployment Check
+The login page includes copy-ready demo credentials for easier reviewer access.
 
-```bash
-./pre-deploy-check.sh
-```
+## Resume-Friendly Project Summary
 
-### 2. Deploy Everything
-
-```bash
-./deploy.sh
-```
-
-The deployment script will:
-
--   ✅ Install Docker (if not installed)
--   ✅ Create environment files from examples
--   ✅ Set up SSL certificates via Let's Encrypt
--   ✅ Start all services with Docker Compose
--   ✅ Seed database with admin user
--   ✅ Run health checks
-
-## 📁 Project Structure
-
-```
-.
-├── docker-compose.yaml     # Main orchestration file
-├── nginx.conf             # Nginx reverse proxy config
-├── deploy.sh              # Main deployment script
-├── pre-deploy-check.sh    # Pre-deployment validation
-├── setup-env.sh           # Environment setup helper
-├── monitor.sh             # Service monitoring
-├── backup.sh              # Database backup script
-├── fix-ssl.sh             # SSL troubleshooting helper
-├── server-tmp/            # File upload directory
-├── pickone-admin/         # Admin panel (Next.js)
-├── pickone-client/        # Client app (Next.js)
-└── pickone-server/        # Backend API (Express.js)
-```
-
-## 🔧 Environment Variables
-
-### Main .env
-
-```env
-# Database
-MONGODB_URI=mongodb://admin:your_password@mongodb:27017/pickone?authSource=admin
-
-# JWT
-JWT_SECRET=your_super_secure_jwt_secret_here
-JWT_EXPIRES_IN=7d
-
-# Admin Credentials
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=securepassword123
-
-# Production URLs
-ADMIN_URL=https://admin.azmarif.dev
-CLIENT_URL=https://client.azmarif.dev
-SERVER_URL=https://server.azmarif.dev
-```
-
-### Service Environment Files
-
-Each service (admin/client/server) has its own `.env` file with specific configurations.
-
-## 🎯 Admin Access
-
-After deployment, access admin panel:
-
--   **Login**: https://admin.azmarif.dev/auth/signin
--   **Dashboard**: https://admin.azmarif.dev/dashboard
-
-Default admin credentials:
-
--   Email: `admin@example.com`
--   Password: `securepassword123`
-
-## 🗂️ File Upload
-
-Files are stored in `server-tmp/` directory and served via:
-`https://server.azmarif.dev/server-tmp/filename.ext`
-
-## 📊 Monitoring & Maintenance
-
-### Check Service Status
-
-```bash
-./monitor.sh
-```
-
-### View Logs
-
-```bash
-# All services
-docker-compose logs -f
-
-# Specific service
-docker-compose logs -f pickone-admin
-docker-compose logs -f pickone-client
-docker-compose logs -f pickone-backend
-docker-compose logs -f nginx
-```
-
-### Database Backup
-
-```bash
-./backup.sh
-```
-
-### SSL Certificate Renewal
-
-SSL certificates auto-renew via cron job. Manual renewal:
-
-```bash
-./fix-ssl.sh
-```
-
-## 🔍 Troubleshooting
-
-### Container Issues
-
-```bash
-# Restart all services
-docker-compose restart
-
-# Rebuild and restart
-docker-compose down
-docker-compose up --build -d
-```
-
-### SSL Issues
-
-```bash
-# Check SSL status
-./fix-ssl.sh
-
-# Check nginx config
-docker-compose exec nginx nginx -t
-
-# Reload nginx
-docker-compose exec nginx nginx -s reload
-```
-
-### Database Issues
-
-```bash
-# Connect to MongoDB
-docker-compose exec mongodb mongosh -u admin -p your_password
-
-# View database
-use pickone
-show collections
-```
-
-## 🌟 Production Features
-
--   ✅ **HTTPS SSL** with auto-renewal
--   ✅ **Rate limiting** and security headers
--   ✅ **Health monitoring** endpoints
--   ✅ **Automated backups**
--   ✅ **File upload** system
--   ✅ **Database seeding** with admin user
--   ✅ **Container restart** policies
--   ✅ **Nginx reverse proxy** with caching
-
-## 📞 Support
-
-For issues or questions:
-
-1. Check logs: `docker-compose logs`
-2. Run health check: `./monitor.sh`
-3. Validate setup: `./pre-deploy-check.sh`
-
----
-
-**Happy Deploying! 🚀**
+Built and deployed a multi-app eCommerce system with independent frontend/admin services, a secure backend API, cloud media integration, analytics, and production-grade operational improvements (CORS/auth hardening, performance tuning, deployment reliability, and dashboard functionality).
